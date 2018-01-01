@@ -89,7 +89,7 @@
     }
   }
   function onSearchAddress() {
-    var url = "http://localhost:3000/representatives?address=" + document.getElementById('autocomplete').value;
+    var url = "http://city-council-finder.herokuapp.com/representatives?address=" + document.getElementById('autocomplete').value;
     httpGetAsync(url, onResultReturned);
   }
 
