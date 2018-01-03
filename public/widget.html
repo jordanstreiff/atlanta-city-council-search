@@ -104,7 +104,7 @@
   }
 
   function onResultReturned(result) {
-    if (result.district_id) {
+    if (result.district_id > 0) {
       var councilMember = result;
       var districtHTML = '<p class="mb0">You\'re in <span class=\'bold\'>District ' + councilMember.district_id + '</span> and <a class="bold"><a class="text-decoration-none" target="_blank" href="https://www.atlantaga.gov/government/departments/planning-community-development/office-of-zoning-development/neighborhood-planning-unit-npu">NPU ' + councilMember.npu + '</a>.</span>';
       var nameHTML = ' Your local council member is <span class="bold"><a class="text-decoration-none" target="_blank" href="' + councilMember.website + '">' + councilMember.full_name + '</a></span>.';
