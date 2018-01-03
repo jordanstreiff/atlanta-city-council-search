@@ -9,5 +9,9 @@ require 'yaml'
 
 reps_yaml = YAML.load_file(Rails.root.join('lib', 'seeds', 'representatives.yml'))
 reps_yaml.collect do |district_id, rep|
-  Representative.create(district_id: district_id, full_name: rep["full_name"])
+  Representative.create(district_id: district_id,
+                        full_name: rep["full_name"],
+                        email: rep["email"],
+                        phone_number: rep["phone"],
+                        website: rep["url"])
 end
