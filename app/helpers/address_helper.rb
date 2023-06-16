@@ -10,10 +10,10 @@ module AddressHelper
       district_id = district_for_point([location.longitude, location.latitude])
       npu = npu_for_point([location.longitude, location.latitude])
       if district_id
-        result = { district_id: district_id, npu: npu, address: location.formatted_address, location: { longitude: location.longitude,
+        result = { district_id: district_id, npu: npu, address: location.display_name, location: { longitude: location.longitude,
         latitude: location.latitude }, status: "DISTRICT_FOUND"}
       else
-        result = { district_id: nil, npu: nil, address: location.formatted_address, location: { longitude: location.longitude,
+        result = { district_id: nil, npu: nil, address: location.display_name, location: { longitude: location.longitude,
                                                                                               latitude: location.latitude }, status: "DISTRICT_NOT_FOUND"}
       end
     else

@@ -4,6 +4,7 @@ This is a codebase for an Atlanta City Council Search web application. The appli
 
 To run the application, follow these steps:
 
+* Copy `.env.copy` to `.env` and add your google api key.
 * Run `bundle install` to install necessary gems
 * Run `rake db:migrate` to migrate the database
 * Run `rake db:seed` to seed the database with representative data
