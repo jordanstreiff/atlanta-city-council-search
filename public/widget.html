@@ -1,121 +1,124 @@
 <!doctype html>
 <html>
+
 <head>
-    <meta charset="utf-8"/>
-    <title></title>
-    <!--[if lt IE 9]>
+  <meta charset="utf-8" />
+  <title></title>
+  <!--[if lt IE 9]>
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/basscss/8.0.3/css/basscss-cp.css" rel="stylesheet">
-    <link href="https://unpkg.com/basscss-btn@1.1.0/css/btn.css" rel="stylesheet">
-    <link href="https://unpkg.com/basscss-btn-primary@1.1.0/css/btn-primary.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/basscss/8.0.3/css/basscss-cp.css" rel="stylesheet">
+  <link href="https://unpkg.com/basscss-btn@1.1.0/css/btn.css" rel="stylesheet">
+  <link href="https://unpkg.com/basscss-btn-primary@1.1.0/css/btn-primary.css" rel="stylesheet">
 </head>
+
 <body>
-<style>
+  <style>
     body {
-        font-family: sans-serif;
+      font-family: sans-serif;
     }
 
     .input {
-        font-family: inherit;
-        font-size: inherit;
-        display: block;
-        width: 100%;
-        height: 2.5rem;
-        padding: .5rem;
-        margin-bottom: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-        box-sizing: border-box;
+      font-family: inherit;
+      font-size: inherit;
+      display: block;
+      width: 100%;
+      height: 2.5rem;
+      padding: .5rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      box-sizing: border-box;
     }
 
     a {
-        color: #0074d9;
+      color: #0074d9;
     }
-</style>
+  </style>
 
-<div class="clearfix border p2">
+  <div class="clearfix border p2">
     <div class="col col-12">
-        <input class="input" id="autocomplete" placeholder="Enter your address"
-               onFocus="geolocate()" type="text"></input>
+      <input class="input" id="autocomplete" placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
     </div>
     <button class="col col-12 btn btn-primary not-rounded pl2" id="address_search">FIND MY COUNCIL MEMBER</button>
     <div id="result"></div>
-</div>
-<script>
-  //    var baseUrl = "http://localhost:3000";
-  var baseUrl = "https://city-council-finder.herokuapp.com";
-  document.getElementById("address_search").addEventListener("click", onSearchAddress);
+  </div>
+  <script>
+    // var baseUrl = "http://localhost:3000";
+    var baseUrl = "https://atl-council-checker-8e21cf359647.herokuapp.com";
+    document.getElementById("address_search").addEventListener("click", onSearchAddress);
 
-  function httpGetAsync(theUrl, callback) {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function () {
-      if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-        callback(JSON.parse(xmlHttp.responseText));
+    function httpGetAsync(theUrl, callback) {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+          callback(JSON.parse(xmlHttp.responseText));
+      }
+      xmlHttp.open("GET", theUrl, true); // true for asynchronous
+      xmlHttp.send(null);
     }
-    xmlHttp.open("GET", theUrl, true); // true for asynchronous
-    xmlHttp.send(null);
-  }
 
-  function initAutocomplete() {
-    // Create the autocomplete object, restricting the search to geographical
-    // location types.
-    autocomplete = new google.maps.places.Autocomplete(
+    function initAutocomplete() {
+      // Create the autocomplete object, restricting the search to geographical
+      // location types.
+      autocomplete = new google.maps.places.Autocomplete(
       /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
-      {types: ['geocode']});
+        { types: ['geocode'] });
 
-    // When the user selects an address from the dropdown, populate the address
-    // fields in the form.
-    autocomplete.addListener('place_changed', fillInAddress);
-  }
-
-  function fillInAddress() {
-    // Get the place details from the autocomplete object.
-    var place = autocomplete.getPlace();
-
-    // Get each component of the address from the place details
-    // and fill the corresponding field on the form.
-    for (var i = 0; i < place.address_components.length; i++) {
-      var addressType = place.address_components[i].types[0];
+      // When the user selects an address from the dropdown, populate the address
+      // fields in the form.
+      autocomplete.addListener('place_changed', fillInAddress);
     }
-  }
 
-  // Bias the autocomplete object to the user's geographical location,
-  // as supplied by the browser's 'navigator.geolocation' object.
-  function geolocate() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        var geolocation = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        var circle = new google.maps.Circle({
-          center: geolocation,
-          radius: position.coords.accuracy
+    function fillInAddress() {
+      // Get the place details from the autocomplete object.
+      var place = autocomplete.getPlace();
+
+      // Get each component of the address from the place details
+      // and fill the corresponding field on the form.
+      for (var i = 0; i < place.address_components.length; i++) {
+        var addressType = place.address_components[i].types[0];
+      }
+    }
+
+    // Bias the autocomplete object to the user's geographical location,
+    // as supplied by the browser's 'navigator.geolocation' object.
+    function geolocate() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          var geolocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          var circle = new google.maps.Circle({
+            center: geolocation,
+            radius: position.coords.accuracy
+          });
+          autocomplete.setBounds(circle.getBounds());
         });
-        autocomplete.setBounds(circle.getBounds());
-      });
+      }
     }
-  }
 
-  function onSearchAddress() {
-    var url = baseUrl + "/representatives?address=" + document.getElementById('autocomplete').value;
-    httpGetAsync(url, onResultReturned);
-  }
-
-  function onResultReturned(result) {
-    if (result.district_id > 0) {
-      var councilMember = result;
-      var districtHTML = '<p class="mb0">You\'re in <span class=\'bold\'>District ' + councilMember.district_id + '</span> and <a class="bold"><a class="text-decoration-none" target="_blank" href="https://www.atlantaga.gov/government/departments/planning-community-development/office-of-zoning-development/neighborhood-planning-unit-npu">NPU ' + councilMember.npu + '</a>.</span>';
-      var nameHTML = ' Your local council member is <span class="bold"><a class="text-decoration-none" target="_blank" href="' + councilMember.website + '">' + councilMember.full_name + '</a></span>.';
-      var contactHTML = ' You can email them at <a class="text-decoration-none" href="mailto:' + councilMember.email + '">' + councilMember.email + '</a> or call them at <span class="bold">' + councilMember.phone_number + '</span>.</p>';
-      document.getElementById('result').innerHTML = "<div class='col col-12'>" + districtHTML + nameHTML + contactHTML + "</div>";
-    } else {
-      document.getElementById('result').innerHTML = "<div class='col col-12'><p class='mb0'>Sorry, we couldn't find any results. The address you entered may not be inside the Atlanta city limits.</p></div>";
+    function onSearchAddress() {
+      var url = baseUrl + "/representatives?address=" + document.getElementById('autocomplete').value;
+      httpGetAsync(url, onResultReturned);
     }
-  }
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBH94a8G8SLOhwpq9hOzyKexraiasWcJAc&libraries=places&callback=initAutocomplete"
-        async defer></script>
+
+    function onResultReturned(result) {
+      if (result.district_id > 0) {
+        var councilMember = result;
+        var districtHTML = '<p class="mb0">You\'re in <span class=\'bold\'>District ' + councilMember.district_id + '</span> and <a class="bold"><a class="text-decoration-none" target="_blank" href="https://www.atlantaga.gov/government/departments/planning-community-development/office-of-zoning-development/neighborhood-planning-unit-npu">NPU ' + councilMember.npu + '</a>.</span>';
+        var nameHTML = ' Your local council member is <span class="bold"><a class="text-decoration-none" target="_blank" href="' + councilMember.website + '">' + councilMember.full_name + '</a></span>.';
+        var contactHTML = ' You can email them at <a class="text-decoration-none" href="mailto:' + councilMember.email + '">' + councilMember.email + '</a> or call them at <span class="bold">' + councilMember.phone_number + '</span>.</p>';
+        document.getElementById('result').innerHTML = "<div class='col col-12'>" + districtHTML + nameHTML + contactHTML + "</div>";
+      } else {
+        document.getElementById('result').innerHTML = "<div class='col col-12'><p class='mb0'>Sorry, we couldn't find any results. The address you entered may not be inside the Atlanta city limits.</p></div>";
+      }
+    }
+  </script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBH94a8G8SLOhwpq9hOzyKexraiasWcJAc&libraries=places&callback=initAutocomplete"
+    async defer></script>
 </body>
+
 </html>
