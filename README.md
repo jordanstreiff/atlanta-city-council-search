@@ -1,10 +1,15 @@
 # README
 
-To run:
-* bundle install
-* rake db:migrate
-* rake db:seed
-* rails s
+This is a codebase for an Atlanta City Council Search web application. The application allows users to find their local city council district and member by entering their address. The application is built using Ruby on Rails and utilizes Google Maps API for geocoding.
 
-To contribute:
-* Fork and make a PR.
+To run the application, follow these steps:
+
+* Run `bundle install` to install necessary gems
+* Run `rake db:migrate` to migrate the database
+* Run `rake db:seed` to seed the database with representative data
+* Run `rails s` to start the server
+* To contribute, fork the repository and make a pull request.
+
+The widget is a piece of HTML code that can be embedded into any website. It allows users to enter their address and find their local city council district and member without leaving the current website. The widget is built using Google Maps API for geocoding and retrieves the representative data from the database. The code for the widget is located in the file `public/widget.html`.
+
+Overall, this codebase provides a simple and easy-to-use solution for Atlanta residents to find their local city council district and member.
